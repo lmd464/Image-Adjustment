@@ -162,6 +162,25 @@ def median_filtering(src):
     return dst
 
 
+# Histogram Equalization
+def equalize_hist(src):
+    # Test : 비교용
+    cv2.imshow('Original', src)
+
+    # RGB -> HSV 후 , V Channel에 HE 적용
+    img_hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
+    img_hsv[:, :, 2] = cv2.equalizeHist(img_hsv[:, :, 2])
+
+    dst = cv2.cvtColor(img_hsv, cv2.COLOR_HSV2BGR)
+
+    cv2.imshow('Histogram Equalization', dst)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
+
+    return dst
+
+
+
 
 
 
