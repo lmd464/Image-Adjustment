@@ -11,13 +11,13 @@ def main():
 
 
     # TEST
-
     dst_avg = average_filtering(src)
     dst_shp = sharpening_filtering(src)
     dst_bi = bilateral_filtering(src)
     dst_med = median_filtering(src_salt)
     dst_he = equalize_hist(src)
 
+    cv2.imshow('original', src)
     cv2.imshow('avg_processed', dst_avg)
     cv2.imshow('shp_processed', dst_shp)
     cv2.imshow('bi_processed', dst_bi)
@@ -30,18 +30,26 @@ def main():
 
     '''
     # Segmentation 테스트중
+    # bilateral -> canny -> closing
     bi = cv2.bilateralFilter(src, -1, 30, 30)
     can = cv2.Canny(bi, 190, 200)
 
     kernel = np.ones((3, 3), np.uint8)
     dst = cv2.morphologyEx(can, cv2.MORPH_CLOSE, kernel)
-    dst = cv2.dilate(dst, kernel, iterations=2)
+    dst[:5, :5] = 0
+    cv2.floodFill(dst, None, (0, 0), (255, 255, 255))
+    dst = 255 - dst
+    dst = cv2.morphologyEx(dst, cv2.MORPH_OPEN, kernel)
+
+
 
     #cnts, _ = cv2.findContours(dst, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     #for cnt in cnts:
         #cv2.drawContours(dst, [cnt], -1, (255, 255, 255), cv2.FILLED)
+    cv2.imshow("test", dst)
+    cv2.waitKey()
+    cv2.destroyAllWindows()
     '''
-
 
 if __name__ == '__main__':
     main()

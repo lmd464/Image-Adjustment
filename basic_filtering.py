@@ -43,8 +43,6 @@ def trackbar_change(x):
 
 # Average Filtering
 def average_filtering(src):
-    # Test : 비교용
-    cv2.imshow('Original', src)
 
     cv2.namedWindow('Average Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Blurrity', 'Average Filter', 0, 20, trackbar_change)
@@ -73,8 +71,6 @@ def average_filtering(src):
 
 # Sharpening Filtering
 def sharpening_filtering(src):
-    # Test : 비교용
-    cv2.imshow('Original', src)
 
     cv2.namedWindow('Sharpening Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Sharpness', 'Sharpening Filter', 0, 100, trackbar_change)
@@ -104,8 +100,6 @@ def sharpening_filtering(src):
 # Bilateral filtering
 # 적용 키 누르고 시간 좀 걸릴 수 있음
 def bilateral_filtering(src):
-    # Test : 비교용
-    cv2.imshow('Original', src)
 
     cv2.namedWindow('Bilateral Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Sigma Color', 'Bilateral Filter', 0, 50, trackbar_change)
@@ -134,8 +128,6 @@ def bilateral_filtering(src):
 
 # Median Filtering
 def median_filtering(src):
-    # Test : 비교용
-    cv2.imshow('Original', src)
 
     cv2.namedWindow('Median Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Smoothness', 'Median Filter', 0, 10, trackbar_change)
@@ -164,8 +156,6 @@ def median_filtering(src):
 
 # Histogram Equalization
 def equalize_hist(src):
-    # Test : 비교용
-    cv2.imshow('Original', src)
 
     # RGB -> HSV 후 , V Channel에 HE 적용
     img_hsv = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
