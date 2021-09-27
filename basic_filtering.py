@@ -138,11 +138,12 @@ def median_filtering(src):
     cv2.imshow('Original', src)
 
     cv2.namedWindow('Median Filter', cv2.WINDOW_AUTOSIZE)
-    cv2.createTrackbar('Filter Size', 'Median Filter', 0, 10, trackbar_change)
+    cv2.createTrackbar('Smoothness', 'Median Filter', 0, 10, trackbar_change)
 
     while True:
-        filter_size = cv2.getTrackbarPos('Filter Size', 'Median Filter')
-        filter_size = filter_size * 2 + 1
+        smoothness = cv2.getTrackbarPos('Smoothness', 'Median Filter')
+        filter_size = smoothness * 2 + 1
+        print("Smoothness : " + str(smoothness))
         print("Filter Size : " + str(filter_size))
 
         dst = cv2.medianBlur(src, filter_size)
