@@ -60,8 +60,8 @@ def average_filtering(src):
         cv2.imshow('Average Filter', dst)
 
 
-        # ESC : 종료
-        input = cv2.waitKey(1) & 0xFF
+        # ESC : 종료 / 필터 적용 지연시간 0.1초
+        input = cv2.waitKey(100) & 0xFF
         if input == 27:
             print("Average Filtering Complete")
             print("----------------------------")
@@ -93,8 +93,8 @@ def sharpening_filtering(src):
         dst = cv2.filter2D(src, -1, sharpening_filter)
         cv2.imshow('Sharpening Filter', dst)
 
-        # ESC : 종료
-        input = cv2.waitKey(1) & 0xFF
+        # ESC : 종료 / 필터 적용 지연시간 0.1초
+        input = cv2.waitKey(100) & 0xFF
         if input == 27:
             print("Sharpening Filtering Complete")
             print("----------------------------")
@@ -111,8 +111,8 @@ def sharpening_filtering(src):
 def bilateral_filtering(src):
 
     cv2.namedWindow('Bilateral Filter', cv2.WINDOW_AUTOSIZE)
-    cv2.createTrackbar('Sigma Color', 'Bilateral Filter', 0, 50, trackbar_change)
-    cv2.createTrackbar('Sigma Space', 'Bilateral Filter', 0, 50, trackbar_change)
+    cv2.createTrackbar('Sigma Color', 'Bilateral Filter', 0, 30, trackbar_change)
+    cv2.createTrackbar('Sigma Space', 'Bilateral Filter', 0, 30, trackbar_change)
     sigma_color = 0
     sigma_space = 0
 
@@ -130,8 +130,8 @@ def bilateral_filtering(src):
         dst = cv2.bilateralFilter(src, -1, sigma_color, sigma_space)
         cv2.imshow('Bilateral Filter', dst)
 
-        # ESC : 종료
-        input = cv2.waitKey(1) & 0xFF
+        # ESC : 종료 / 필터 적용 지연시간 3초
+        input = cv2.waitKey(3000) & 0xFF
         if input == 27:
             print("Bilateral Filtering Complete")
             print("----------------------------")
@@ -162,8 +162,8 @@ def median_filtering(src):
         dst = cv2.medianBlur(src, filter_size)
         cv2.imshow('Median Filter', dst)
 
-        # ESC : 종료
-        input = cv2.waitKey(1) & 0xFF
+        # ESC : 종료 / 필터 적용 지연시간 0.1초
+        input = cv2.waitKey(100) & 0xFF
         if input == 27:
             print("Median Filtering Complete")
             print("----------------------------")
