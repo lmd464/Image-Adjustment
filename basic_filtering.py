@@ -85,7 +85,7 @@ def sharpening_filtering(src):
         dst = cv2.filter2D(src, -1, sharpening_filter)
         cv2.imshow('Sharpening Filter', dst)
 
-        # ESC : 종료, 다른 키가 눌렸다면 Sharpening 처리
+        # ESC : 종료, 다른 키가 눌렸다면 sharpening 처리
         input = cv2.waitKey() & 0xFF
         if input == 27:
             print("ESC")
@@ -114,7 +114,7 @@ def bilateral_filtering(src):
         dst = cv2.bilateralFilter(src, -1, sigma_color, sigma_space)
         cv2.imshow('Bilateral Filter', dst)
 
-        # ESC : 종료, 다른 키가 눌렸다면 blur 처리
+        # ESC : 종료, 다른 키가 눌렸다면 bilateral 처리
         input = cv2.waitKey() & 0xFF
         if input == 27:
             print("ESC")
@@ -142,7 +142,7 @@ def median_filtering(src):
         cv2.imshow('Median Filter', dst)
 
 
-        # ESC : 종료, 다른 키가 눌렸다면 blur 처리
+        # ESC : 종료, 다른 키가 눌렸다면 median 처리
         input = cv2.waitKey() & 0xFF
         if input == 27:
             print("ESC")

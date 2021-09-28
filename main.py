@@ -11,6 +11,7 @@ def main():
 
 
     # TEST
+
     dst_avg = average_filtering(src)
     dst_shp = sharpening_filtering(src)
     dst_bi = bilateral_filtering(src)
@@ -28,20 +29,26 @@ def main():
     cv2.destroyAllWindows()
 
 
+
     '''
     # Segmentation 테스트중
     # bilateral -> canny -> closing
-    bi = cv2.bilateralFilter(src, -1, 30, 30)
-    can = cv2.Canny(bi, 190, 200)
+    #bi = cv2.bilateralFilter(src, -1, 30, 30)
+    #can = cv2.Canny(bi, 190, 200)
+    gaus = np.dot(cv2.getGaussianKernel(5, 10), cv2.getGaussianKernel(5, 5).T)
 
+    dog = cv2.Sobel(gaus, cv2.CV_64F, 1, 1, 5)
+    dog = dog / (np.sum(dog) + 0.001)
+    dst = cv2.filter2D(cv2.imread('./img/ex3.jpg', cv2.IMREAD_GRAYSCALE), -1, dog)
+
+    
     kernel = np.ones((3, 3), np.uint8)
     dst = cv2.morphologyEx(can, cv2.MORPH_CLOSE, kernel)
     dst[:5, :5] = 0
     cv2.floodFill(dst, None, (0, 0), (255, 255, 255))
     dst = 255 - dst
     dst = cv2.morphologyEx(dst, cv2.MORPH_OPEN, kernel)
-
-
+    
 
     #cnts, _ = cv2.findContours(dst, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     #for cnt in cnts:
