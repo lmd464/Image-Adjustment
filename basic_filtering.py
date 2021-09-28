@@ -34,33 +34,37 @@ def trackbar_change(x):
 
 #########################################################
 
-##########################
-#       Interfaces       #
-#  슬라이드바로 값 조정 후,  #
-#  아무 키나 누르면 적용됨   #
-#  ESC 누르면 루틴 종료     #
-##########################
+##############################
+#       Interfaces           #
+#  슬라이드바로 값 조정 시 적용됨 #
+#     ESC 누르면 루틴 종료      #
+##############################
 
 # Average Filtering
 def average_filtering(src):
 
     cv2.namedWindow('Average Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Blurrity', 'Average Filter', 0, 20, trackbar_change)
+    blurrity = 0
 
     while True:
+        prev_blurrity = blurrity
         blurrity = cv2.getTrackbarPos('Blurrity', 'Average Filter')
         filter_size = blurrity * 2 + 1
-        print("Blurrity : " + str(blurrity))
-        print("Filter Size : " + str(filter_size))
+
+        if prev_blurrity != blurrity:
+            print("Blurrity : " + str(blurrity))
+            print("Filter Size : " + str(filter_size))
 
         dst = cv2.blur(src, (filter_size, filter_size))
         cv2.imshow('Average Filter', dst)
 
 
-        # ESC : 종료, 다른 키가 눌렸다면 blur 처리
-        input = cv2.waitKey() & 0xFF
+        # ESC : 종료
+        input = cv2.waitKey(1) & 0xFF
         if input == 27:
-            print("ESC")
+            print("Average Filtering Complete")
+            print("----------------------------")
             break
         else:
             continue
@@ -74,21 +78,26 @@ def sharpening_filtering(src):
 
     cv2.namedWindow('Sharpening Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Sharpness', 'Sharpening Filter', 0, 100, trackbar_change)
+    sharpness = 0
 
     while True:
+        prev_sharpness = sharpness
         sharpness = cv2.getTrackbarPos('Sharpness', 'Sharpening Filter')
         filter_size = sharpness * 2 + 1
-        print("Sharpness : " + str(sharpness))
-        print("Filter Size : " + str(filter_size))
+
+        if prev_sharpness != sharpness:
+            print("Sharpness : " + str(sharpness))
+            print("Filter Size : " + str(filter_size))
 
         sharpening_filter = generate_sharpening_filter((filter_size, filter_size))
         dst = cv2.filter2D(src, -1, sharpening_filter)
         cv2.imshow('Sharpening Filter', dst)
 
-        # ESC : 종료, 다른 키가 눌렸다면 sharpening 처리
-        input = cv2.waitKey() & 0xFF
+        # ESC : 종료
+        input = cv2.waitKey(1) & 0xFF
         if input == 27:
-            print("ESC")
+            print("Sharpening Filtering Complete")
+            print("----------------------------")
             break
         else:
             continue
@@ -98,26 +107,34 @@ def sharpening_filtering(src):
 
 
 # Bilateral filtering
-# 적용 키 누르고 시간 좀 걸릴 수 있음
+# 시간 좀 걸릴 수 있음
 def bilateral_filtering(src):
 
     cv2.namedWindow('Bilateral Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Sigma Color', 'Bilateral Filter', 0, 50, trackbar_change)
     cv2.createTrackbar('Sigma Space', 'Bilateral Filter', 0, 50, trackbar_change)
+    sigma_color = 0
+    sigma_space = 0
 
     while True:
+        prev_sigma_color = sigma_color
+        prev_sigma_space = sigma_space
         sigma_color = cv2.getTrackbarPos('Sigma Color', 'Bilateral Filter')
         sigma_space = cv2.getTrackbarPos('Sigma Space', 'Bilateral Filter')
-        print("Sigma Color : " + str(sigma_color))
-        print("Sigma Space : " + str(sigma_space))
+
+        if prev_sigma_color != sigma_color:
+            print("Sigma Color : " + str(sigma_color))
+        if prev_sigma_space != sigma_space:
+            print("Sigma Space : " + str(sigma_space))
 
         dst = cv2.bilateralFilter(src, -1, sigma_color, sigma_space)
         cv2.imshow('Bilateral Filter', dst)
 
-        # ESC : 종료, 다른 키가 눌렸다면 bilateral 처리
-        input = cv2.waitKey() & 0xFF
+        # ESC : 종료
+        input = cv2.waitKey(1) & 0xFF
         if input == 27:
-            print("ESC")
+            print("Bilateral Filtering Complete")
+            print("----------------------------")
             break
         else:
             continue
@@ -131,21 +148,25 @@ def median_filtering(src):
 
     cv2.namedWindow('Median Filter', cv2.WINDOW_AUTOSIZE)
     cv2.createTrackbar('Smoothness', 'Median Filter', 0, 10, trackbar_change)
+    smoothness = 0
 
     while True:
+        prev_smoothness = smoothness
         smoothness = cv2.getTrackbarPos('Smoothness', 'Median Filter')
         filter_size = smoothness * 2 + 1
-        print("Smoothness : " + str(smoothness))
-        print("Filter Size : " + str(filter_size))
+
+        if prev_smoothness != smoothness:
+            print("Smoothness : " + str(smoothness))
+            print("Filter Size : " + str(filter_size))
 
         dst = cv2.medianBlur(src, filter_size)
         cv2.imshow('Median Filter', dst)
 
-
-        # ESC : 종료, 다른 키가 눌렸다면 median 처리
-        input = cv2.waitKey() & 0xFF
+        # ESC : 종료
+        input = cv2.waitKey(1) & 0xFF
         if input == 27:
-            print("ESC")
+            print("Median Filtering Complete")
+            print("----------------------------")
             break
         else:
             continue
@@ -165,14 +186,10 @@ def equalize_hist(src):
 
     cv2.imshow('Histogram Equalization', dst)
     cv2.waitKey()
+    print("Histogram Equalization Complete")
+    print("----------------------------")
     cv2.destroyAllWindows()
 
     return dst
-
-
-
-
-
-
 
 
