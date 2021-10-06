@@ -134,8 +134,9 @@ class WindowClass(QMainWindow, form_class) :
         elif self.process_combo.currentText() == 'Histogram Equalization':
             dst = equalize_hist(src)
 
-        # 수정 전 Pixmap을 Undo Stack에 넣음
+        # 수정 전 Pixmap을 Undo Stack에 넣음, redo stack 초기화
         self.undo_stack.append(self.qPixmapVar)
+        self.redo_stack = []
 
 
         # 수행한 결과를 GUI에 반영
