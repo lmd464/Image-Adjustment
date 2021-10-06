@@ -124,15 +124,22 @@ class WindowClass(QMainWindow, form_class) :
 
         # 선택한 프로세스 수행
         if self.process_combo.currentText() == 'Average Filter':
+            self.process_combo.setEnabled(False)
             dst = average_filtering(src)
         elif self.process_combo.currentText() == 'Sharpening Filter':
+            self.process_combo.setEnabled(False)
             dst = sharpening_filtering(src)
         elif self.process_combo.currentText() == 'Bilateral Filter':
+            self.process_combo.setEnabled(False)
             dst = bilateral_filtering(src)
         elif self.process_combo.currentText() == 'Median Filter':
+            self.process_combo.setEnabled(False)
             dst = median_filtering(src)
         elif self.process_combo.currentText() == 'Histogram Equalization':
+            self.process_combo.setEnabled(False)
             dst = equalize_hist(src)
+
+        self.process_combo.setEnabled(True)
 
         # 수정 전 Pixmap을 Undo Stack에 넣음, redo stack 초기화
         self.undo_stack.append(self.qPixmapVar)
