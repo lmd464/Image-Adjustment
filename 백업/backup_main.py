@@ -6,12 +6,12 @@ def main():
     # 이미지 읽어오기
     #src = cv2.imread('./img/ex3.jpg', cv2.IMREAD_GRAYSCALE)
     #src_salt = cv2.imread('./img/salt_img.png', cv2.IMREAD_GRAYSCALE)
-    src = cv2.imread('./img/ex3.jpg', cv2.IMREAD_COLOR)
+    src = cv2.imread('../img/ex3.jpg', cv2.IMREAD_COLOR)
     src_salt = cv2.imread('./img/salt_img3.jpg', cv2.IMREAD_COLOR)
 
 
     # TEST
-
+    '''
     dst_avg = average_filtering(src)
     dst_shp = sharpening_filtering(src)
     dst_bi = bilateral_filtering(src)
@@ -24,7 +24,10 @@ def main():
     cv2.imshow('bi_processed', dst_bi)
     cv2.imshow('med_processed', dst_med)
     cv2.imshow('he_processed', dst_he)
-    
+    '''
+    dst_hsvadj = HSV_Adjustment(src)
+    cv2.imshow('hsvadj', dst_hsvadj)
+
     cv2.waitKey()
     cv2.destroyAllWindows()
 

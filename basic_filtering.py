@@ -197,3 +197,63 @@ def equalize_hist(src):
     return dst
 
 
+# HSV Adjustment
+def HSV_Adjustment(src):
+    h, w = src.shape[0], src.shape[1]
+    cv2.namedWindow('HSV Adjustment', cv2.WINDOW_AUTOSIZE)
+    cv2.resizeWindow('HSV Adjustment', width=w, height=h+150)
+
+    # Hue : 180step / Saturation : 255step / Value : 255step
+    cv2.createTrackbar('Hue', 'HSV Adjustment', 1, 180, trackbar_change)
+    cv2.createTrackbar('Saturation', 'HSV Adjustment', 1, 255, trackbar_change)
+    cv2.createTrackbar('Value', 'HSV Adjustment', 1, 255, trackbar_change)
+
+    # HSV화 -> float화 -> 채널분리
+    hsv_src = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
+    hsv_src = np.float64(hsv_src)
+    Original_Hue_Channel, Original_Saturation_Channel, Original_Value_Channel = cv2.split(hsv_src)
+    hue_scale, saturation_scale, value_scale = 0, 0, 0
+
+    while True:
+        prev_hue_scale = hue_scale
+        prev_saturation_scale = saturation_scale
+        prev_value_scale = value_scale
+
+
+        # Scale : HSV 변경 정도 조정
+        hue_scale = cv2.getTrackbarPos('Hue', 'HSV Adjustment')
+        saturation_scale = cv2.getTrackbarPos('Saturation', 'HSV Adjustment')
+        value_scale = cv2.getTrackbarPos('Value', 'HSV Adjustment')
+
+
+        # Scale 값 반영하여 H, S, V Channel 값 조정
+        Hue_Channel = np.clip(Original_Hue_Channel / np.median(Original_Hue_Channel) * hue_scale, 0, 180)
+        Saturation_Channel = np.clip(Original_Saturation_Channel / np.median(Original_Saturation_Channel) * saturation_scale, 0, 255)
+        Value_Channel = np.clip(Original_Value_Channel / np.median(Original_Value_Channel) * value_scale, 0, 255)
+
+
+        if prev_hue_scale != hue_scale:
+            print("Hue Scale : " + str(hue_scale))
+        if prev_saturation_scale != saturation_scale:
+            print("Saturation Scale : " + str(saturation_scale))
+        if prev_value_scale != value_scale:
+            print("Value Scale : " + str(value_scale))
+
+        hsv_dst = cv2.merge( [Hue_Channel, Saturation_Channel, Value_Channel] )
+        hsv_dst = np.uint8(hsv_dst)
+        dst = cv2.cvtColor(hsv_dst, cv2.COLOR_HSV2BGR)
+        cv2.imshow('HSV Adjustment', dst)
+
+        # ESC : 종료 / 필터 적용 지연시간 0.1초
+        input = cv2.waitKey(100) & 0xFF
+        if input == 27:
+            print("HSV Adjustment Complete")
+            print("----------------------------")
+            break
+        else:
+            continue
+
+    cv2.destroyAllWindows()
+    return dst
+
+
