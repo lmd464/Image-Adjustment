@@ -17,11 +17,19 @@ class WindowClass(QMainWindow, form_class) :
         ##########################
         self.init_UI()
 
-        # 현재 이미지 정보
-        self.qPixmapVar = QPixmap()
+        # 원본 이미지 경로
         self.filepath = ""
 
+        # 현재 이미지 정보
+        self.qPixmapVar = QPixmap()
 
+        # Undo / Redo Stack
+        self.undo_stack = []
+        self.redo_stack = []
+
+
+
+    # GUI와 함수 연결
     def init_UI(self):
         # Undo / Redo / Process / Export 비활성화
         self.undo_button.setEnabled(False)
@@ -44,6 +52,12 @@ class WindowClass(QMainWindow, form_class) :
         self.process_combo.addItem('Histogram Equalization')
         self.process_combo.currentIndexChanged.connect(self.process_select)
         self.process_combo.setCurrentText('None')
+
+        # Undo Button 연결
+        self.undo_button.clicked.connect(self.undo)
+
+        # Redo Button 연결
+        self.redo_button.clicked.connect(self.redo)
 
 
 
@@ -81,6 +95,10 @@ class WindowClass(QMainWindow, form_class) :
         self.process_combo.setEnabled(True)
         self.export_button.setEnabled(True)
 
+        # Undo / Redo Stack 초기화
+        self.undo_stack = []
+        self.redo_stack = []
+
 
     # Export Button의 동작 : 이미지 원본과 같은 폴더에 _modified 붙여 저장
     def file_save(self):
@@ -93,8 +111,8 @@ class WindowClass(QMainWindow, form_class) :
 
         # 저장 완료 메시지 팝업
         msg = QMessageBox()
-        msg.setWindowTitle("Image Save")
-        msg.setText("Save Complete!")
+        msg.setWindowTitle("Save Complete!")
+        msg.setText(save_file_path)
         msg.exec_()
 
 
@@ -116,6 +134,10 @@ class WindowClass(QMainWindow, form_class) :
         elif self.process_combo.currentText() == 'Histogram Equalization':
             dst = equalize_hist(src)
 
+        # 수정 전 Pixmap을 Undo Stack에 넣음
+        self.undo_stack.append(self.qPixmapVar)
+
+
         # 수행한 결과를 GUI에 반영
         # BGR2RGB 변환 -> numpy 배열을 QImage로 변환 -> QPixmap으로 변환 후 qPixmapVar에 재할당 -> GUI에 표시
         dst = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
@@ -124,6 +146,37 @@ class WindowClass(QMainWindow, form_class) :
         self.qPixmapVar = QPixmap.fromImage(qImg)
         self.image_area.setPixmap(self.qPixmapVar)
 
+        self.undo_redo_validation()
+
+
+    # Undo Button의 동작
+    # 현재 상태를 redo stack에 push 후, undo stack에서 pop하여 현재 상태로 만듦
+    def undo(self):
+        self.redo_stack.append(self.qPixmapVar)
+        self.qPixmapVar = self.undo_stack.pop()
+        self.image_area.setPixmap(self.qPixmapVar)
+        self.undo_redo_validation()
+
+
+    # Redo Button의 동작
+    def redo(self):
+        self.undo_stack.append(self.qPixmapVar)
+        self.qPixmapVar = self.redo_stack.pop()
+        self.image_area.setPixmap(self.qPixmapVar)
+        self.undo_redo_validation()
+
+
+    # Undo / Redo Button 활성화 여부 결정
+    def undo_redo_validation(self):
+        if len(self.undo_stack) >= 1:
+            self.undo_button.setEnabled(True)
+        else:
+            self.undo_button.setEnabled(False)
+
+        if len(self.redo_stack) >= 1:
+            self.redo_button.setEnabled(True)
+        else:
+            self.redo_button.setEnabled(False)
 
 
 if __name__ == "__main__" :
