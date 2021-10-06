@@ -50,6 +50,7 @@ class WindowClass(QMainWindow, form_class) :
         self.process_combo.addItem('Bilateral Filter')
         self.process_combo.addItem('Median Filter')
         self.process_combo.addItem('Histogram Equalization')
+        self.process_combo.addItem('HSV Adjustment')
         self.process_combo.currentIndexChanged.connect(self.process_select)
         self.process_combo.setCurrentText('None')
 
@@ -138,6 +139,9 @@ class WindowClass(QMainWindow, form_class) :
         elif self.process_combo.currentText() == 'Histogram Equalization':
             self.process_combo.setEnabled(False)
             dst = equalize_hist(src)
+        elif self.process_combo.currentText() == 'HSV Adjustment':
+            self.process_combo.setEnabled(False)
+            dst = HSV_Adjustment(src)
         else:
             dst = src
 
