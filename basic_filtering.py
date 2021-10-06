@@ -42,8 +42,9 @@ def trackbar_change(x):
 
 # Average Filtering
 def average_filtering(src):
-
+    h, w = src.shape[0], src.shape[1]
     cv2.namedWindow('Average Filter', cv2.WINDOW_AUTOSIZE)
+    cv2.resizeWindow('Average Filter', width=w, height=h+50)
     cv2.createTrackbar('Blurrity', 'Average Filter', 0, 20, trackbar_change)
     blurrity = 0
 
@@ -75,8 +76,9 @@ def average_filtering(src):
 
 # Sharpening Filtering
 def sharpening_filtering(src):
-
+    h, w = src.shape[0], src.shape[1]
     cv2.namedWindow('Sharpening Filter', cv2.WINDOW_AUTOSIZE)
+    cv2.resizeWindow('Sharpening Filter', width=w, height=h+50)
     cv2.createTrackbar('Sharpness', 'Sharpening Filter', 0, 100, trackbar_change)
     sharpness = 0
 
@@ -109,8 +111,9 @@ def sharpening_filtering(src):
 # Bilateral filtering
 # 시간 좀 걸릴 수 있음
 def bilateral_filtering(src):
-
+    h, w = src.shape[0], src.shape[1]
     cv2.namedWindow('Bilateral Filter', cv2.WINDOW_AUTOSIZE)
+    cv2.resizeWindow('Bilateral Filter', width=w, height=h+100)
     cv2.createTrackbar('Sigma Color', 'Bilateral Filter', 0, 30, trackbar_change)
     cv2.createTrackbar('Sigma Space', 'Bilateral Filter', 0, 30, trackbar_change)
     sigma_color = 0
@@ -145,8 +148,9 @@ def bilateral_filtering(src):
 
 # Median Filtering
 def median_filtering(src):
-
+    h, w = src.shape[0], src.shape[1]
     cv2.namedWindow('Median Filter', cv2.WINDOW_AUTOSIZE)
+    cv2.resizeWindow('Median Filter', width=w, height=h+50)
     cv2.createTrackbar('Smoothness', 'Median Filter', 0, 10, trackbar_change)
     smoothness = 0
 
