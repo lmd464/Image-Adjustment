@@ -203,10 +203,10 @@ def HSV_Adjustment(src):
     cv2.namedWindow('HSV Adjustment', cv2.WINDOW_AUTOSIZE)
     cv2.resizeWindow('HSV Adjustment', width=w, height=h+150)
 
-    # Hue : 180step / Saturation : 255step / Value : 255step
-    cv2.createTrackbar('Hue', 'HSV Adjustment', 1, 180, trackbar_change)
-    cv2.createTrackbar('Saturation', 'HSV Adjustment', 1, 255, trackbar_change)
-    cv2.createTrackbar('Value', 'HSV Adjustment', 1, 255, trackbar_change)
+    # Hue : 500step / Saturation : 500step / Value : 500step
+    cv2.createTrackbar('Hue', 'HSV Adjustment', 0, 500, trackbar_change)
+    cv2.createTrackbar('Saturation', 'HSV Adjustment', 0, 500, trackbar_change)
+    cv2.createTrackbar('Value', 'HSV Adjustment', 0, 500, trackbar_change)
 
     # HSV화 -> float화 -> 채널분리
     hsv_src = cv2.cvtColor(src, cv2.COLOR_BGR2HSV)
@@ -227,9 +227,11 @@ def HSV_Adjustment(src):
 
 
         # Scale 값 반영하여 H, S, V Channel 값 조정
-        Hue_Channel = np.clip(Original_Hue_Channel / np.median(Original_Hue_Channel) * hue_scale, 0, 180)
-        Saturation_Channel = np.clip(Original_Saturation_Channel / np.median(Original_Saturation_Channel) * saturation_scale, 0, 255)
-        Value_Channel = np.clip(Original_Value_Channel / np.median(Original_Value_Channel) * value_scale, 0, 255)
+        # 각 채널에서 : 픽셀 최댓값에 대한 각 픽셀값의 비율(0 ~ 1)에다 적당한 scaling factor 곱하여 픽셀값 조정
+        # clip으로 오버플로우 / 언더플로우 방지
+        Hue_Channel = np.clip(Original_Hue_Channel / np.max(Original_Hue_Channel) * hue_scale, 0, 179)
+        Saturation_Channel = np.clip(Original_Saturation_Channel / np.max(Original_Saturation_Channel) * saturation_scale, 0, 255)
+        Value_Channel = np.clip(Original_Value_Channel / np.max(Original_Value_Channel) * value_scale, 0, 255)
 
 
         if prev_hue_scale != hue_scale:
