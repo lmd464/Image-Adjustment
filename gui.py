@@ -99,6 +99,14 @@ class WindowClass(QMainWindow, form_class) :
         self.undo_stack = []
         self.redo_stack = []
 
+        # image 픽셀 수가 1200 * 800 이상일 경우, 시간이 오래 걸릴 수 있음을 팝업으로 알림
+        if image_height * image_width >= 1200 * 800:
+            msg = QMessageBox()
+            msg.setWindowTitle("Image size is Big")
+            msg.setText("It may take a while to process")
+            msg.exec_()
+
+
 
     # Export Button의 동작 : 이미지 원본과 같은 폴더에 _modified 붙여 저장
     def file_save(self):
@@ -131,6 +139,13 @@ class WindowClass(QMainWindow, form_class) :
             dst = sharpening_filtering(src)
         elif self.process_combo.currentText() == 'Bilateral Filter':
             self.process_combo.setEnabled(False)
+
+            # Bilateral Filter일 경우, 시간이 오래 걸릴 수 있음을 팝업으로 알림
+            msg = QMessageBox()
+            msg.setWindowTitle("Bilateral Filtering")
+            msg.setText("It may take a while to process")
+            msg.exec_()
+
             dst = bilateral_filtering(src)
         elif self.process_combo.currentText() == 'Median Filter':
             self.process_combo.setEnabled(False)
