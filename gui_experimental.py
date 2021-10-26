@@ -4,7 +4,7 @@ from PyQt5 import uic
 from PyQt5.QtGui import QPixmap, QImage
 import qimage2ndarray
 
-from basic_filtering import *
+from process import *
 
 # UI파일 연결
 form_class = uic.loadUiType("gui.ui")[0]
@@ -133,10 +133,10 @@ class WindowClass(QMainWindow, form_class) :
         # 선택한 프로세스 수행
         if self.process_combo.currentText() == 'Average Filter':
             self.process_combo.setEnabled(False)
-            dst = average_filtering(src)
+            dst = Process.average_filtering(src)
         elif self.process_combo.currentText() == 'Sharpening Filter':
             self.process_combo.setEnabled(False)
-            dst = sharpening_filtering(src)
+            dst = Process.sharpening_filtering(src)
         elif self.process_combo.currentText() == 'Bilateral Filter':
             self.process_combo.setEnabled(False)
 
@@ -146,16 +146,16 @@ class WindowClass(QMainWindow, form_class) :
             msg.setText("It may take a while to process")
             msg.exec_()
 
-            dst = bilateral_filtering(src)
+            dst = Process.bilateral_filtering(src)
         elif self.process_combo.currentText() == 'Median Filter':
             self.process_combo.setEnabled(False)
-            dst = median_filtering(src)
+            dst = Process.median_filtering(src)
         elif self.process_combo.currentText() == 'Histogram Equalization':
             self.process_combo.setEnabled(False)
-            dst = equalize_hist(src)
+            dst = Process.equalize_hist(src)
         elif self.process_combo.currentText() == 'HSV Adjustment':
             self.process_combo.setEnabled(False)
-            dst = HSV_Adjustment(src)
+            dst = Process.HSV_Adjustment(src)
         else:
             dst = src
 
