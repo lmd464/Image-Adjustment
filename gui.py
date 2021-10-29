@@ -6,7 +6,7 @@ import qimage2ndarray
 
 from process import *
 import process_restore
-import file_io
+import fileIO
 
 
 # UI파일 연결
@@ -20,13 +20,13 @@ class WindowClass(QMainWindow, form_class) :
         ##########################
 
         # 현재 이미지 정보
-        self.qPixmapVar = QPixmap()
+        self.image_value = QPixmap()
 
         # Undo / Redo 정보
         self.restore = process_restore.Restore(caller_class=self)
 
         # 파일 입출력 정보
-        self.fileIO = file_io.FileIO(caller_class=self)
+        self.file_io = fileIO.FileIO(caller_class=self)
 
         # UI 설정 : 버튼과 동작 연결
         self.init_UI()
@@ -42,10 +42,10 @@ class WindowClass(QMainWindow, form_class) :
         self.export_button.setEnabled(False)
 
         # Import Button 연결
-        self.import_button.clicked.connect(self.fileIO.file_open)
+        self.import_button.clicked.connect(self.file_io.file_open)
 
         # Export Button 연결
-        self.export_button.clicked.connect(self.fileIO.file_save)
+        self.export_button.clicked.connect(self.file_io.file_save)
 
         # Process Combobox 구성 및 연결
         self.process_combo.addItem('None')
@@ -68,7 +68,7 @@ class WindowClass(QMainWindow, form_class) :
     # Process Combo Box의 동작
     def process_select(self):
         # QPixmap -> QImage -> RGB Swap -> Numpy Array
-        src = qimage2ndarray.rgb_view(self.qPixmapVar.toImage().rgbSwapped())
+        src = qimage2ndarray.rgb_view(self.image_value.toImage().rgbSwapped())
 
         # 선택한 프로세스 수행
         if self.process_combo.currentText() == 'Average Filter':
@@ -99,17 +99,17 @@ class WindowClass(QMainWindow, form_class) :
         self.process_combo.setEnabled(True)
 
         # 수정 전 Pixmap을 Undo Stack에 넣음, redo stack 초기화
-        self.restore.undo_stack.append(self.qPixmapVar)
+        self.restore.undo_stack.append(self.image_value)
         self.restore.redo_stack = []
 
 
         # 수행한 결과를 GUI에 반영
-        # BGR2RGB 변환 -> numpy 배열을 QImage로 변환 -> QPixmap으로 변환 후 qPixmapVar에 재할당 -> GUI에 표시
+        # BGR2RGB 변환 -> numpy 배열을 QImage로 변환 -> QPixmap으로 변환 후 qPixmapVar(image_value)에 재할당 -> GUI에 표시
         dst = cv2.cvtColor(dst, cv2.COLOR_BGR2RGB)
         h, w, c = dst.shape
         qImg = QImage(dst.data, w, h, w*c, QImage.Format_RGB888)
-        self.qPixmapVar = QPixmap.fromImage(qImg)
-        self.image_area.setPixmap(self.qPixmapVar)
+        self.image_value = QPixmap.fromImage(qImg)
+        self.image_area.setPixmap(self.image_value)
 
         self.restore.undo_redo_validation()
 

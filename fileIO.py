@@ -20,7 +20,7 @@ class FileIO:
         print(self.filepath)
 
         # Label에 표시할 이미지 불러옴
-        self.window_class.qPixmapVar.load(self.filepath)
+        self.window_class.image_value.load(self.filepath)
 
         # import 후처리
         self.__import_postprocess()
@@ -49,7 +49,7 @@ class FileIO:
         # 이미지 크기에 맞춰, 전체 창 너비 / 높이 조절
         # image width + 40 / image height + 140
         # 버튼의 총 크기보다 창 크기가 작을 경우, 버튼 크기를 우선으로 함 (총 370 + padding 80 = 450)
-        image_width, image_height = self.window_class.qPixmapVar.width(), self.window_class.qPixmapVar.height()
+        image_width, image_height = self.window_class.image_value.width(), self.window_class.image_value.height()
         self.window_class.resize(max(image_width + 40, 450), image_height + 140)
 
         # 변화된 창 크기에 맞춰 버튼들 재배치
@@ -61,7 +61,7 @@ class FileIO:
 
         # 이미지 크기만큼 Label 크기 조절 후 이미지 표시
         self.window_class.image_area.resize(image_width, image_height)
-        self.window_class.image_area.setPixmap(self.window_class.qPixmapVar)
+        self.window_class.image_area.setPixmap(self.window_class.image_value)
 
         # Process 콤보상자 / Export 버튼 활성화
         self.window_class.process_combo.setEnabled(True)
