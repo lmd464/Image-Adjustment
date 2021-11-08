@@ -70,6 +70,7 @@ class FileIO:
         # Undo / Redo Stack 초기화
         self.window_class.restore.undo_stack.clear()
         self.window_class.restore.redo_stack.clear()
+        self.window_class.restore.undo_redo_validation()
 
         # image 픽셀 수가 1200 * 800 이상일 경우, 시간이 오래 걸릴 수 있음을 팝업으로 알림
         if image_height * image_width >= 1200 * 800:
