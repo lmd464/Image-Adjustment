@@ -108,7 +108,7 @@ class WindowClass(QMainWindow, form_class) :
 
         # 수정 전 Pixmap을 Undo Stack에 넣음, redo stack 초기화
         self.restore.undo_stack.append(self.image_value)
-        self.restore.redo_stack = []
+        self.restore.redo_stack.clear()
 
 
         # 수행한 결과를 GUI에 반영
