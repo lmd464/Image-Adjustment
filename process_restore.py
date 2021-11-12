@@ -26,6 +26,18 @@ class Restore:
         self.undo_redo_validation()
 
 
+    # Process 수행 시 stack의 관리
+    # 수정 전 Pixmap을 Undo Stack에 넣음, redo stack 초기화
+    def process_stack_management(self):
+        self.undo_stack.append(self.window_class.image_value)
+        self.redo_stack.clear()
+
+    # Import 수행 시 stack의 관리
+    # undo, redo stack 초기화
+    def import_stack_management(self):
+        self.undo_stack.clear()
+        self.redo_stack.clear()
+
     # Undo / Redo Button 활성화 여부 결정
     def undo_redo_validation(self):
         if len(self.undo_stack) >= 1:
